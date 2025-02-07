@@ -11,32 +11,32 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <header>
-      <div className="flex flex-row justify-between items-center px-4 py-2 shadow-lg bg-slate-300">
+      <div className="flex flex-row justify-between items-center px-8 py-4 shadow-sm bg-slate-300">
         <div className="flex items-center">
           <img src={logo} alt="logo" className="h-6" />
           <Link
             to={"/"}
-            className="ml-2 text-purple-800 text-xl font-extrabold"
+            className="ml-2 text-purple-800 text-2xl font-extrabold"
           >
             Interviewify
           </Link>
         </div>
-        <div className="flex gap-8">
+        <div className="flex gap-16">
           <Link
             to={"/"}
-            className="font-semibold hover:scale-100 transition-all"
+            className="font-bold hover:scale-100 text-lg transition-all"
           >
             About
           </Link>
           <Link
             to={"/dashboard"}
-            className="font-semibold hover:scale-100 transition-all"
+            className="font-bold text-lg hover:scale-100 transition-all"
           >
             Dashboard
           </Link>
           <Link
             to={"/"}
-            className="font-semibold hover:scale-100 transition-all"
+            className="font-bold text-lg hover:scale-100 transition-all"
           >
             History
           </Link>

@@ -3,7 +3,9 @@ import hero from "../assets/hero-section.jpg";
 import logo from "../assets/logoipsum-295.svg";
 import SignIn from "@/components/auth/Login";
 
+
 const Signin = () => {
+ 
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
