@@ -11,17 +11,32 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { chatSession } from "../../gemini";
+import { LoaderCircle } from "lucide-react";
+// import { ChatSession } from "@google/generative-ai";
 
 //  inidetails={role,desc,}
 export default function DialogDemo() {
+  const [loading, setloading] = useState(false);
   const [role, setRole] = useState("");
   const [desc, setDesc] = useState("");
   const [experience, setExperience] = useState(0);
 
-  const onSubmitHandler=(e)=>{
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(role,desc,experience);
-  }
+    // console.log(role, desc, experience);
+    setloading(true);
+    const prompt = `Generate 5 technical interview questions with short answers in JSON format for a candidate applying for: Role: ${role} ,Tech Stack: ${desc} ,Experience: ${experience} years
+Format the response as valid JSON with keys: question, answer`;
+    const result = await chatSession.sendMessage(prompt);
+    const response = result.response
+      .text()
+      .replace('```json', "")
+      .replace('```', "");
+    const json=JSON.parse(response);
+    if (response) setloading(false);
+    console.log(json);
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -87,11 +102,20 @@ export default function DialogDemo() {
             <Button
               type="button"
               variant="ghost"
-              className="bg-gray-100 px-6 mr-4"
+              className="bg-gray-100 px-6 mr-4 "
             >
               Cancel
             </Button>
-            <Button type="submit">Start Interview</Button>
+            <Button disabled={loading} type="submit">
+              {loading ? (
+                <span className="flex flex-row gap-2 font-bold">
+                  <LoaderCircle className="animate-spin" />
+                  Generating
+                </span>
+              ) : (
+                <span>Start Interview</span>
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
