@@ -29,7 +29,7 @@ const Navbar = () => {
             About
           </Link>
           <Link
-            to={"/"}
+            to={"/dashboard"}
             className="font-semibold hover:scale-100 transition-all"
           >
             Dashboard
@@ -43,7 +43,7 @@ const Navbar = () => {
         </div>
         <div>
           <SignedOut>
-            <SignInButton className="font-semibold hover:scale-100 transition-all" />
+            <Link to={"/signin"} className="font-semibold hover:scale-100 transition-all" >Signin</Link>
           </SignedOut>
           <SignedIn>
             <UserButton />
