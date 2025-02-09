@@ -2,13 +2,15 @@ import React from "react";
 import Hero from "../components/Hero";
 import { useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { useEmail } from "../UserContext";
 
 const Home = () => {
    const { user } = useUser();
-  
+   const {email,setEmail}=useEmail();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
     useEffect(() => {
       if (user) {
-        fetch("http://localhost:5000/api/auth/clerk", {
+        fetch(`${backendUrl}/api/auth/clerk`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -22,7 +24,9 @@ const Home = () => {
           .then((data) => console.log("User authenticated:"))
           .catch((error) => console.error("Auth error:", error));
       }
-    }, [user]);
+      setEmail(user?.primaryEmailAddress?.emailAddress);
+    }, [user,setEmail]);
+    console.log(email);
   return (
     <div>
         <Hero/>

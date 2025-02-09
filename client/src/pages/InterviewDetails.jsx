@@ -1,11 +1,12 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-react";
+// import { useUser } from "@clerk/clerk-react";
 import { Lightbulb, LucideWebcam } from "lucide-react";
 import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useEmail } from "../UserContext";
 
 const InterviewDetails = () => {
   const [interview, setInterview] = useState({});
@@ -13,8 +14,9 @@ const InterviewDetails = () => {
   const navigate = useNavigate();
 
   const { mockId } = useParams();
-  const { user , isLoaded } = useUser();
-  const email = user?.primaryEmailAddress?.emailAddress;
+  // const { user , isLoaded } = useUser();
+  // const email = user?.primaryEmailAddress?.emailAddress;
+  const { email } = useEmail();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     fetch(`${backendUrl}/api/interviews/${email}?mockId=${mockId}`)
@@ -23,11 +25,11 @@ const InterviewDetails = () => {
       .catch((error) => console.error(error));
   }, [mockId, email]);
 
-  if (!isLoaded) return <div>Loading...</div>;
+  // if (!isLoaded) return <div>Loading...</div>;
 
   const navigateHandler = () => {
     navigate(`/interview/${mockId}/live`);
-  }
+  };
 
   return (
     <div className="mx-24 mt-8">
@@ -72,16 +74,26 @@ const InterviewDetails = () => {
             </div>
           ) : (
             <div className="bg-black h-72 w-auto rounded-lg flex border border-gray-300 items-center justify-center">
-                <Webcam mirrored={true} style={{ width: "100%", height: "100%" }} />
+              <Webcam
+                mirrored={true}
+                style={{ width: "100%", height: "100%" }}
+              />
             </div>
           )}
           <Button
-            className="bg-primary text-white font-bold p-4 rounded-md"
+            className="bg-primary active:bg-red-300 text-white font-bold p-4 rounded-md"
             onClick={() => setWebcamEnabled(!webcamEnabled)}
           >
-            {webcamEnabled?"Disable":"Enable"} WebCam & Microphone
+            {webcamEnabled ? "Disable" : "Enable"} WebCam & Microphone
           </Button>
-          <Button onClick={navigateHandler} variant="ghost" className="bg-gray-100 font-bold p-4 rounded-md"> Start Interview</Button>
+          <Button
+            onClick={navigateHandler}
+            variant="ghost"
+            className="bg-green-600 active:bg-red-300 text-white font-bold p-4 rounded-md"
+          >
+            {" "}
+            Start Interview
+          </Button>
         </div>
       </div>
     </div>

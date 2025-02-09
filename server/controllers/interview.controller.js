@@ -14,7 +14,7 @@ export const addInterview = async (req, res) => {
 export const sendInterviewDetails = async (req, res) => {
     const email = req.params.email;
     const mockId = req.query.mockId;
-    console.log(email, mockId);
+    // console.log(email, mockId);
     const user = await User.findOne({email});
     if (!user) {
         return res.status(404).json({message: "User not found"});
@@ -25,4 +25,41 @@ export const sendInterviewDetails = async (req, res) => {
         return res.status(404).json({message: "Interview not found"});
     }
     res.status(200).json(interview);
+}
+
+export const submitInterview = async (req, res) => {
+    const {email, mockId, interviewSubmission} = req.body.submission;
+    console.log(email, mockId);
+    const user = await User.findOne({email});
+    if (!user) {
+        return res.status(404).json({message: "User not found"});
+    }
+    user.interviewResults.push({mockId, details: interviewSubmission});
+    await user.save();
+    res.status(201).json({message: "Interview submitted successfully"});
+}
+
+export const getSubmittedInterview= async (req, res) => {
+    const email = req.params.email;
+    const mockId = req.query.mockId;
+    const user = await User.findOne({email});   
+    if (!user) {
+        return res.status(404).json({message: "User not found"});
+    }
+    const interview = user.interviewResults.find(interview => interview.mockId === mockId);
+    if (!interview) {
+        console.log("Interview not found");
+        return res.status(404).json({message: "Interview not found"});
+    }
+    // console.log(interview.details);
+    res.status(200).json(interview.details);
+}
+
+export const sendAllInterviewDetails = async (req, res) => {
+    const email = req.params.email;
+    const user = await User.findOne({email});
+    if (!user) {
+        return res.status(404).json({message: "User not found"});
+    }
+    res.status(200).json(user.interviews);
 }

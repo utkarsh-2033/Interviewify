@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Questions from "@/components/Question/QuestionsIndex";
 import WebCam from "@/components/Question/WebCam";
-import { useUser } from "@clerk/clerk-react";
+// import { useUser } from "@clerk/clerk-react";
+import {useEmail} from "../UserContext";
 import { Button } from "@/components/ui/button";
 
 const Interview = () => {
@@ -10,8 +11,9 @@ const Interview = () => {
   const [activeQuestion, setActiveQuestion] = useState(0);
 
   const { mockId } = useParams();
-  const { user, isLoaded } = useUser();
-  const email = user?.primaryEmailAddress?.emailAddress;
+  // const { user, isLoaded } = useUser();
+  // const email = user?.primaryEmailAddress?.emailAddress;
+  const { email } = useEmail();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const Interview = () => {
       .then((response) => response.json())
       .then((data) => setInterview(data))
       .catch((error) => console.error(error));
-  }, [mockId, email]);
+  }, [mockId]);
 
   if (!interview) return <div>Loading...</div>;
 
@@ -36,6 +38,7 @@ const Interview = () => {
           <WebCam 
           activeQuestion={activeQuestion}
           questions={interview.questions}
+          mockId={mockId}
           onS
           />
         </div>
@@ -43,13 +46,13 @@ const Interview = () => {
       <div className="flex justify-end mr-20">
         {activeQuestion>0 && <Button 
         onClick={() => setActiveQuestion((prev) => prev - 1)}
-        className="bg-primary text-white p-4 rounded-md mt-4 mr-4">
+        className="bg-primary text-white p-4 active:bg-green-400 rounded-md mt-4 mr-4">
           {" "}
           Previous
         </Button>}
         {activeQuestion<interview.questions.length-1 && <Button
           onClick={() => setActiveQuestion((prev) => prev + 1)}
-          className="bg-primary text-white p-4 rounded-md mt-4 mr-4"
+          className="bg-primary text-white p-4 active:bg-green-400 rounded-md mt-4 mr-4"
         >
           Next Question
         </Button>}

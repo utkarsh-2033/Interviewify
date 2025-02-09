@@ -6,13 +6,15 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { chatSession } from "../../../gemini";
-
+import { useEmail } from "../../UserContext";
+import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
-// import { on } from "events";
 
-const WebCam = ({ questions, activeQuestion }) => {
-  const [interviewSubmission, setInterviewSubmission] = useState([]); //to store the question , useranswer , feedback from gemini api and rating in object form each
-  const [currentAnswer, setCurrentAnswer] = useState(""); //to store the current answer of the user
+const WebCam = ({ questions, activeQuestion, mockId }) => {
+  const { email } = useEmail();
+  const navigate = useNavigate();
+  const [interviewSubmission, setInterviewSubmission] = useState([]);
+  const [currentAnswer, setCurrentAnswer] = useState("");
   const {
     error,
     interimResult,
@@ -34,10 +36,10 @@ const WebCam = ({ questions, activeQuestion }) => {
   //   console.log(questions[activeQuestion]);
   const onSubmitAnswer = async () => {
     // Handle the submission of the current answer
-    if (currentAnswer.length < 10) {
-      toast.error("too short answer");
-      return;
-    }
+    // if (currentAnswer.length < 10) {
+    //   toast.error("too short answer");
+    //   return;
+    // }
     const prompt =
       "Analyze the given answer as a Mock Interviewer expert. Provide feedback on what is wrong, suggestions for improvement, and a rating out of 5. Ensure the feedback is concise (5-6 lines max) and return the response in JSON format with 'feedback' and 'rating' fields only Question: " +
       questions[activeQuestion].question +
@@ -48,44 +50,52 @@ const WebCam = ({ questions, activeQuestion }) => {
       .text()
       .replace("```json", "")
       .replace("```", "");
-    console.log(response);
+    // console.log(response);
     const json = JSON.parse(response);
     const newSubmission = {
       index: activeQuestion,
       question: questions[activeQuestion].question,
-      answer: currentAnswer,
+      correctanswer: questions[activeQuestion].answer,
+      useranswer: currentAnswer,
       feedback: json.feedback,
       rating: json.rating,
     };
-    console.log(newSubmission);
+    // console.log(newSubmission);
     setInterviewSubmission([...interviewSubmission, newSubmission]);
     setCurrentAnswer("");
   };
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const submitHandler = async () => {
     console.log("Interview submission:", interviewSubmission);
+    const submission = {
+      email,
+      mockId,
+      interviewSubmission,
+    };
     try {
-        const res = await fetch("http://localhost:5000/api/interviews/submit", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                interviewSubmission,
-            }),
-        });
-        if (!res.ok) {
-            throw new Error("Failed to submit interview");
-        }
+      const res = await fetch(`${backendUrl}/api/interviews/submit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          submission,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to submit interview");
+      }
 
-        const data = await res.json();
-        console.log("Submission successful:", data);
-        toast.success("Interview submitted successfully!");
+      const data = await res.json();
+      console.log("Submission successful:", data);
+      navigate(`/interview/${mockId}/feedback`);
+      toast.success("Interview submitted successfully!");
     } catch (error) {
-        console.error("Error submitting interview:", error);
-        toast.error("Failed to submit interview. Please try again.");
+      console.error("Error submitting interview:", error);
+      toast.error("Failed to submit interview. Please try again.");
     }
-  }
+  };
 
   useEffect(() => {
     if (results.length > 0) {
@@ -106,30 +116,29 @@ const WebCam = ({ questions, activeQuestion }) => {
       <Button
         onClick={isRecording ? stopSpeechToText : startSpeechToText}
         variant="ghost"
-        className="bg-gray-100 font-bold p-4 rounded-md"
+        className={`bg-gray-100 active:bg-red-500 font-bold p-4 rounded-md`}
       >
         <Mic /> {isRecording ? "Stop" : "Start"} Recording
       </Button>
       <Button
         onClick={onSubmitAnswer}
-        variant="ghost"
-        className="bg-primary text-white font-bold p-4 rounded-md"
+        className=" text-white active:bg-red-400 font-bold p-4 rounded-md"
       >
         {" "}
         Submit Answer
       </Button>
-      <div className="mt-4 p-4 bg-gray-100 rounded-md">
+      <div className="mt-4 p-4 bg-transparent rounded-md">
         {/* <h2 className="font-bold">Cu
         rrent Answer:</h2> */}
         <p>{currentAnswer}</p>
       </div>
-      {activeQuestion ==questions.length - 1 && (
+      {activeQuestion == questions.length - 1 && (
         <Button
           onClick={submitHandler}
-          className="bg-green-500 text-center hover:bg-green-500 active:bg-red-500 text-white p-4 rounded-md mt-4 mr-4"
+          className="bg-green-500 text-center hover:bg-green-400 active:bg-red-400 text-white p-4 rounded-md mt-4"
         >
           {" "}
-          Submit
+          Submit Interview
         </Button>
       )}
     </div>

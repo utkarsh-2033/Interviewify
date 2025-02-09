@@ -13,9 +13,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { chatSession } from "../../gemini";
 import { LoaderCircle } from "lucide-react";
-import { useUser } from "@clerk/clerk-react";
+// import { useUser } from "@clerk/clerk-react";
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router-dom";
+import { useEmail } from "@/UserContext";
 
 
 export default function DialogDemo() {
@@ -23,9 +24,11 @@ export default function DialogDemo() {
   const [role, setRole] = useState("");
   const [desc, setDesc] = useState("");
   const [experience, setExperience] = useState(0);
-  const { user } = useUser();
-  const email = user.primaryEmailAddress.emailAddress;
+  // const { user } = useUser();
+  // const email = user.primaryEmailAddress.emailAddress;
+  const email = useEmail();
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // console.log(user);
 
   const onSubmitHandler = async (e) => {
@@ -54,7 +57,7 @@ Format the response as valid JSON with keys: question, answer`;
         },
       };
       // console.log(body);
-      fetch("http://localhost:5000/api/interviews", {
+      fetch(`${backendUrl}/api/interviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,8 +76,8 @@ Format the response as valid JSON with keys: question, answer`;
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="h-28 w-64 bg-gray-200 font-bold " variant="outline">
-          + Add Interview
+        <Button className="h-32 w-72 bg-gray-200 font-bold " variant="outline">
+          + Add New Interview
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-3xl">
@@ -82,7 +85,7 @@ Format the response as valid JSON with keys: question, answer`;
           <DialogTitle className="text-secondary font-semibold text-2xl">
             Add Interview
           </DialogTitle>
-          <DialogDescription>Enter the details below.</DialogDescription>
+          <DialogDescription>Enter the details below to start.</DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmitHandler}>
           <div className="grid gap-4 py-4">
