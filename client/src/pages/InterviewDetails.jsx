@@ -32,12 +32,12 @@ const InterviewDetails = () => {
   };
 
   return (
-    <div className="mx-24 mt-8">
-      <h1 className="mt-12 mb-4 text-2xl font-bold text-center">
+    <div className="mx-2 md:mx-24 mt-8 mb-4 md:mb-0">
+      <h1 className="mt-4 md:mt-12 md:mb-4 text-xl md:text-2xl font-bold text-center">
         {" "}
         Mock Interview Details:
       </h1>
-      <div className="flex flex-row gap-12">
+      <div className="flex flex-col md:flex-row gap-12">
         <div className="flex flex-col gap-6 flex-1 mt-8">
           <div className=" p-8 py-12 bg-gray-10 border shadow-sm border-gray-200 rounded-md">
             <p className="mb-2">

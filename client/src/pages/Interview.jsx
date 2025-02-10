@@ -5,6 +5,7 @@ import WebCam from "@/components/Question/WebCam";
 // import { useUser } from "@clerk/clerk-react";
 import {useEmail} from "../UserContext";
 import { Button } from "@/components/ui/button";
+import { Lightbulb } from "lucide-react";
 
 const Interview = () => {
   const [interview, setInterview] = useState({});
@@ -27,14 +28,14 @@ const Interview = () => {
 
   return (interview && interview.questions) && (
     <div>
-      <div className="mx-24 mt-8 gap-12 grid grid-cols-1 md:grid-cols-2">
-        <div className=" flex-1 border border-gray-200 p-4 bg-gray-10 rounded-md">
+      <div className="md:mx-24 mt-8 gap-3 md:gap-12 grid grid-cols-1 md:grid-cols-2">
+        <div className="mx-1 flex-1 border border-gray-200 p-4 bg-gray-10 rounded-md">
           <Questions
             activeQuestion={activeQuestion}
             questions={interview.questions}
           />
         </div>
-        <div className="flex flex-col flex-1 justify-center gap-4">
+        <div className="flex flex-col flex-1 mx-2 md:mx-0 justify-center gap-4">
           <WebCam 
           activeQuestion={activeQuestion}
           questions={interview.questions}
@@ -58,6 +59,16 @@ const Interview = () => {
         </Button>}
         
       </div>
+      <div className="md:hidden my-4 mx-2 bg-blue-100 border-blue-700 text-primary p-4 rounded-md">
+              <h1 className="font-bold text-lg flex items-center gap-2 mb-3">
+                <Lightbulb />
+                Note
+              </h1>
+              <p className="text-sm font-semibold">
+                Click on the start recording button to start recording your answer.
+                Click on the Submit Answer button to submit your answer.
+              </p>
+            </div>
     </div>
   );
 };

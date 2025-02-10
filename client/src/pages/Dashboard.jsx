@@ -28,13 +28,15 @@ const Dashboard = () => {
     }
   };
   return (
-    <div className="mx-28 my-8">
+    <div className="mx-4 md:mx-28 my-8">
       <div>
-        <h1 className="text-4xl font-bold text-primary my-4">Dashboard</h1>
+        <h1 className="text-2xl md:text-4xl font-bold text-primary my-4">
+          Dashboard
+        </h1>
         <DialogDemo />
       </div>
       <div className="mt-12">
-        <h1 className="text-2xl font-bold text-primary">
+        <h1 className="text-lg md:text-2xl font-bold text-primary">
           Your Interviews:
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">

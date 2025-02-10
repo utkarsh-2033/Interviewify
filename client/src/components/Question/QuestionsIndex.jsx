@@ -14,12 +14,12 @@ const QuestionsIndex = (props) => {
   };
 
   return (
-    <div className=" mt-8">
+    <div className=" md:mt-8">
       {/* <h1 className="text-2xl font-bold text-center">Questions</h1> */}
       <ul className="mt-4 gap-2 flex flex-wrap">
         {questions.map((question, index) => (
           <li
-            className={`p-1 px-3 rounded-3xl bg-gray-50 border border-gray-200 
+            className={`text-xs md:text-lg p-1 px-3 rounded-3xl bg-gray-50 border border-gray-200 
               ${activeQuestion === index ? "bg-primary text-white" : ""}`}
             key={index}
           >
@@ -31,16 +31,14 @@ const QuestionsIndex = (props) => {
         <p>{questions[activeQuestion].question}</p>
         <span onClick={() => readQuestionAloud(questions[activeQuestion].question)}><Volume2/></span>
       </div>
-      <div className=" mt-24 bg-blue-100 border-blue-700 text-primary p-4 rounded-md">
+      <div className=" hidden md:block mt-24 bg-blue-100 border-blue-700 text-primary p-4 rounded-md">
         <h1 className="font-bold text-lg flex items-center gap-2 mb-3">
           <Lightbulb />
           Note
         </h1>
         <p className="text-sm font-semibold">
-          Enable Video Web Cam and Microphone to Start your Al Generated Mock
-          Interview, It Has 5 question which you can answer and at the last you
-          will get the report on the basis of your answers. NOTE Web cam access
-          you can diable at any the if you want.
+          Click on the start recording button to start recording your answer.
+          Click on the Submit Answer button to submit your answer.
         </p>
       </div>
     </div>

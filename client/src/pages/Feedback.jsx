@@ -38,7 +38,7 @@ const Feedback = () => {
         }
     };
   return (
-    <div className="mx-28 mt-8">
+    <div className=" mx-2 md:mx-28 mt-8">
       <div>
         <h1 className="text-green-600 font-bold text-3xl">Congratulations!</h1>
         <h1 className="text-black font-bold text-xl mt-2">

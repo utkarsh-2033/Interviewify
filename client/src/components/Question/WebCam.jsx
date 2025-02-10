@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import useSpeechToText from "react-hook-speech-to-text";
-import { Mic } from "lucide-react";
+import { Lightbulb, Mic } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useEffect } from "react";
@@ -108,7 +108,7 @@ const WebCam = ({ questions, activeQuestion, mockId }) => {
     return <div>Error: {error.message}</div>;
   }
   return (
-    <div className="flex flex-col justify-center gap-4">
+    <div className="flex flex-col justify-center gap-2 md:gap-4">
       <div className="bg-black h-84 w-auto rounded-lg flex border border-gray-300 items-center justify-center">
         <Webcam mirrored={true} style={{ width: "80%", height: "85%" }} />
       </div>
@@ -127,7 +127,7 @@ const WebCam = ({ questions, activeQuestion, mockId }) => {
         {" "}
         Submit Answer
       </Button>
-      <div className="mt-4 p-4 bg-transparent rounded-md">
+      <div className="md:mt-4 p-4 bg-transparent rounded-md">
         {/* <h2 className="font-bold">Cu
         rrent Answer:</h2> */}
         <p>{currentAnswer}</p>
@@ -141,6 +141,7 @@ const WebCam = ({ questions, activeQuestion, mockId }) => {
           Submit Interview
         </Button>
       )}
+      
     </div>
   );
 };

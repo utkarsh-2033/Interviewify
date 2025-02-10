@@ -74,7 +74,7 @@ Format the response as valid JSON with keys: question, answer`;
     
   };
   return (
-    <Dialog>
+    <Dialog >
       <DialogTrigger asChild>
         <Button className="h-32 w-72 bg-gray-200 font-bold " variant="outline">
           + Add New Interview
