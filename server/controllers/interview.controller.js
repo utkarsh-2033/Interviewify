@@ -34,6 +34,14 @@ export const submitInterview = async (req, res) => {
     if (!user) {
         return res.status(404).json({message: "User not found"});
     }
+
+    // Check if an interview with the same mockId already exists
+    const existingInterviewIndex = user.interviewResults.findIndex(interview => interview.mockId === mockId);
+    if (existingInterviewIndex !== -1) {
+        // Remove the existing interview
+        user.interviewResults.splice(existingInterviewIndex, 1);
+    }
+
     user.interviewResults.push({mockId, details: interviewSubmission});
     await user.save();
     res.status(201).json({message: "Interview submitted successfully"});

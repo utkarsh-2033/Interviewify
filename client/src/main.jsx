@@ -14,9 +14,11 @@ if (!PUBLISHABLE_KEY) {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    {/* <SonnerProvider> */}
       <UserProvider>
         <App />
       </UserProvider>
+      {/* </SonnerProvider> */}
     </ClerkProvider>
   </StrictMode>
 );

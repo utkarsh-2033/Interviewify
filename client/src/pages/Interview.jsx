@@ -24,6 +24,19 @@ const Interview = () => {
       .catch((error) => console.error(error));
   }, [mockId]);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "You have not submitted interview yet.All your submitted answers will be lost. Are you sure you want to leave?";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   if (!interview) return <div>Loading...</div>;
 
   return (interview && interview.questions) && (

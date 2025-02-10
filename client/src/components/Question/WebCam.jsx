@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import useSpeechToText from "react-hook-speech-to-text";
 import { Lightbulb, Mic } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "sonner"
+
 import { useEffect } from "react";
 import { chatSession } from "../../../gemini";
 import { useEmail } from "../../UserContext";
@@ -29,17 +30,25 @@ const WebCam = ({ questions, activeQuestion, mockId }) => {
 
   useEffect(() => {
     if (interimResult) {
-      setCurrentAnswer(interimResult);
+      setCurrentAnswer((prev) => {
+        // Avoid adding repeated words by comparing last part of prev & interimResult
+        if (!prev.endsWith(interimResult.trim())) {
+          return prev + " " + interimResult.trim();
+        }
+        return prev;
+      });
     }
   }, [interimResult]);
+  
+  
 
   //   console.log(questions[activeQuestion]);
   const onSubmitAnswer = async () => {
-    // Handle the submission of the current answer
-    // if (currentAnswer.length < 10) {
-    //   toast.error("too short answer");
-    //   return;
-    // }
+    
+    if (currentAnswer.length < 10) {
+      toast.error("too short answer");
+      return;
+    }
     const prompt =
       "Analyze the given answer as a Mock Interviewer expert. Provide feedback on what is wrong, suggestions for improvement, and a rating out of 5. Ensure the feedback is concise (5-6 lines max) and return the response in JSON format with 'feedback' and 'rating' fields only Question: " +
       questions[activeQuestion].question +
@@ -105,7 +114,12 @@ const WebCam = ({ questions, activeQuestion, mockId }) => {
 
   if (error) {
     console.error("Speech to text error:", error);
-    return <div>Error: {error.message}</div>;
+    toast.error("Speech to text error. Please use Chrome Browser");
+    return <div className="p-4 bg-red-100 rounded-md mt-4">
+      <h1 className="text-red-500 font-bold" >Speech to text error</h1>
+      <p className="text-gray-600 mt-2">{error}</p>
+      <p className="text-red-500 mt-2">Please use Chrome Browser</p>
+    </div>;
   }
   return (
     <div className="flex flex-col justify-center gap-2 md:gap-4">
@@ -130,7 +144,7 @@ const WebCam = ({ questions, activeQuestion, mockId }) => {
       <div className="md:mt-4 p-4 bg-transparent rounded-md">
         {/* <h2 className="font-bold">Cu
         rrent Answer:</h2> */}
-        <p>{currentAnswer}</p>
+        <p>{interimResult}</p>
       </div>
       {activeQuestion == questions.length - 1 && (
         <Button

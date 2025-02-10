@@ -7,9 +7,11 @@ import InterviewDetails from "./pages/InterviewDetails";
 import Interview from "./pages/Interview";
 import Feedback from "./pages/Feedback";
 import ProtectedPages from "./components/ProtectedPages";
+import { Toaster } from "sonner";
 export default function App() {
   return (
     <BrowserRouter>
+    <Toaster richColors position="top-right" />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
