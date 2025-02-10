@@ -26,7 +26,7 @@ export default function DialogDemo() {
   const [experience, setExperience] = useState(0);
   // const { user } = useUser();
   // const email = user.primaryEmailAddress.emailAddress;
-  const email = useEmail();
+  const {email} = useEmail();
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // console.log(user);

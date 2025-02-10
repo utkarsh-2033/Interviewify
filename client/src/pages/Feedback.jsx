@@ -7,7 +7,7 @@ import {
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useEmail } from "@/UserContext";
-import { HomeIcon, ListCollapse, LogOut } from "lucide-react";
+import { CrossIcon, ListCollapse, LogOut, ServerCrash, } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -38,17 +38,29 @@ const Feedback = () => {
     }
   };
 
+  const calculateAverageRating = () => {
+    if (!interview || !interview.length) return 0;
+    const totalRating = interview.reduce((acc, curr) => acc + curr.rating, 0);
+    return (totalRating / interview.length).toFixed(2);
+  };
+
   return (
     <div className=" mx-2 md:mx-28 mt-8">
       <div>
+      {!interview || interview.length==0 ?(<div>
+        <h1 className="text-green-600 flex items-center font-semibold text-5xl my-6">Opps!<ServerCrash className="text-red-400"/> </h1>
+      </div>):(
+        <div>
         <h1 className="text-green-600 font-bold text-3xl">Congratulations!</h1>
         <h1 className="text-black font-bold text-xl mt-2">
           Here is your interview feedbcak.
         </h1>
         <h1 className="text-purple-600 font-semibold text-lg my-4">
           {" "}
-          Your overall interview rating:{" "}
+          Your overall interview rating :{ calculateAverageRating()}
         </h1>
+        </div>)}
+        
         <Button
           onClick={() => {
             navigate("/dashboard");
